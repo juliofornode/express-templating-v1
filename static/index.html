@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular 2</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container" ng-controller="myController">
+
+    <h1>Simple CRUD API with Mongoose</h1>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Movie</th>
+        <th>Actor</th>
+        <th>Action</th>
+        <th>&nbsp;</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr>
+        <td><input class="form-control" ng-model="movie.title"></td>
+        <td><input class="form-control" ng-model="movie.actor"></td>
+        <td><button class="btn btn-primary" ng-click="addMovie()">Add Movie</button></td>
+        <td>
+          <button class="btn btn-info" ng-click="update()">Update</button>
+          &nbsp;&nbsp;
+          <button class="btn btn-info" ng-click="deselect()">Clear</button>
+        </td>
+      </tr>
+      <tr ng-repeat="movie in movies | orderBy:date:true ">
+        <td>{{movie.title}}</td>
+        <td>{{movie.actor}}</td>
+        <td><button class="btn btn-danger" ng-click="remove(movie._id)">Remove</button></td>
+        <td><button class="btn btn-warning" ng-click="edit(movie._id)">Edit</button></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
