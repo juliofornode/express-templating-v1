@@ -60,7 +60,7 @@ itemRouter.route('/items/:id')
             item.lastName = req.body.lastName;
             item.save(function(err, item) {
                 if(err) res.send(err);
-                res.send(item);
+                res.json(item);
             })
         })
     })
