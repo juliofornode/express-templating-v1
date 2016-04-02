@@ -8,70 +8,74 @@ var mongoose = require('mongoose');
 var app = express();
 
 
+//set static folder
+app.use(express.static('./static'));
+
+
 //use and configure bodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 //connect database, configure schema, set model
-mongoose.connect('mongodb://localhost/routing-v1');
-var itemSchema = mongoose.Schema({
-    name: String,
-    lastName: String
+mongoose.connect('mongodb://localhost/movies');
+var movieSchema = mongoose.Schema({
+    title: String,
+    actor: String
 });
-var Item = mongoose.model('Item', itemSchema);
+var Movie = mongoose.model('Movie', movieSchema);
 
 
 //instantiate express.Router()
-var itemRouter = express.Router();
+var movieRouter = express.Router();
 
 
 //set routes
-itemRouter.route('/items')
-    .get(function(req,res) {
-        Item.find(function(err, items) {
+movieRouter.route('/')
+    .get(function(req, res) {
+        Movie.find(function(err, movies) {
             if(err) res.send(err);
-            res.json(items);
+            res.json(movies);
         })
     })
     .post(function(req, res) {
-        var item = new Item({
-            name: req.body.name,
-            lastName: req.body.lastName
+        var movie = new Movie({
+            title: req.body.title,
+            actor: req.body.actor
         });
-        item.save(function(err, item) {
+        movie.save(function(err, movie) {
             if(err) res.send(err);
-            res.json(item);
+            res.json(movie);
         })
     });
 
 
-itemRouter.route('/items/:id')
+movieRouter.route('/:id')
     .get(function(req, res) {
-        Item.findById(req.params.id, function(err, item) {
+        Movie.findById(req.params.id, function(err, movie) {
             if(err) res.send(err);
-            res.json(item);
+            res.json(movie);
         })
     })
     .put(function(req, res) {
-        Item.findById(req.params.id, function(err, item) {
+        Movie.findById(req.params.id, function(err, movie) {
             if(err) res.send(err);
-            item.name = req.body.name;
-            item.lastName = req.body.lastName;
-            item.save(function(err, item) {
+            movie.title = req.body.title;
+            movie.actor = req.body.actor;
+            movie.save(function(err, movie) {
                 if(err) res.send(err);
-                res.json(item);
+                res.json(movie);
             })
         })
     })
     .delete(function(req, res) {
-        Item.findByIdAndRemove(req.body.id, function(err, item) {
-            res.json(item);
+        Movie.findByIdAndRemove(req.params.id, function(err, movie) {
+            res.json(movie);
         })
     });
 
 //set routes prefix
-app.use('/api', itemRouter);
+app.use('/api', movieRouter);
 
 
 //set server port
