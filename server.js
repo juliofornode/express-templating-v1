@@ -2,14 +2,20 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+var handlebars = require('express-handlebars')
+    .create({defaultLayout: 'main'});
 
 //instantiate express()
 var app = express();
 
 
+//configure handlebars
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+
+
 //set static folder
-app.use(express.static('./static'));
+//app.use(express.static('./static'));
 
 
 //use and configure bodyParser
@@ -35,7 +41,8 @@ movieRouter.route('/')
     .get(function(req, res) {
         Movie.find(function(err, movies) {
             if(err) res.send(err);
-            res.json(movies);
+            res.render('one');
+            //res.json(movies);
         })
     })
     .post(function(req, res) {
